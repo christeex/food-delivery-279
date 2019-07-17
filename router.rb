@@ -1,7 +1,8 @@
 class Router
-  def initialize(meals_controller, customers_controller)
+  def initialize(meals_controller, customers_controller, sessions_controller)
     @meals_controller = meals_controller
     @customers_controller = customers_controller
+    @sessions_controller = sessions_controller
     @running = true
   end
 
@@ -9,8 +10,13 @@ class Router
     puts "Welcome to the Le Wagon Restaurant!"
     puts "           --           "
 
+    employee = @sessions_controller.log_in
     while @running
-      display_tasks
+      if employee.manager?
+        display_manager_tasks
+      else
+        display_delivery_tasks
+      end
       action = gets.chomp.to_i
       print `clear`
       route_action(action)
@@ -26,7 +32,8 @@ class Router
     when 3 then @customers_controller.list
     when 4 then @customers_controller.add
     # when 5 then @controller.mark_as_done
-    when 6 then stop
+    when 6 then run
+    when 7 then stop
     else
       puts "Please press 1, 2, 3, 4 or 5"
     end
@@ -36,7 +43,7 @@ class Router
     @running = false
   end
 
-  def display_tasks
+  def display_manager_tasks
     puts ""
     puts "What do you want to do next?"
     puts "1 - List all meals"
@@ -44,6 +51,11 @@ class Router
     puts "3 - List all customers"
     puts "4 - Add a customer"
     # puts "5 - Mark a recipe as done"
-    puts "6 - Stop and exit the program"
+    puts "6 - Log out"
+    puts "7 - Stop and exit the program"
+  end
+
+  def display_delivery_tasks
+    puts "TODO: Delivery person tasks"
   end
 end

@@ -17,6 +17,10 @@ class BaseRepository
     save_csv
   end
 
+  def find(id)
+    @elements.find { |element| element.id == id }
+  end
+
   def load_csv
     csv_options = { headers: :first_row, header_converters: :symbol }
     CSV.foreach(@csv_file_path, csv_options) do |row|
